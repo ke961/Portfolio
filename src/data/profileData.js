@@ -10,6 +10,7 @@ export const profileData = {
     githubUsername: "ke961",
     linkedin: "https://www.linkedin.com/in/abila-khan-keya",
     linkedinUsername: "abila-khan-keya",
+    website: "https://portfolio-gamma-one-t8oc9ga60h.vercel.app",
     bio: "Highly motivated Computer Science and Engineering student with hands-on experience in Deep Learning, Computer Vision, FastAPI, React.js, Python, Java, and JavaScript. Skilled in developing full-stack web and desktop applications, designing RESTful APIs, implementing ensemble neural architectures, and deploying automated CI/CD workflows using Git/GitHub Actions.",
     typingTitles: [
       "Aspiring Software Engineer",
