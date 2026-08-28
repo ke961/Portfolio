@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, FileText, Mail, Code2, Sparkles } from 'lucide-react';
-import GithubIcon from './GithubIcon';
-import LinkedinIcon from './LinkedinIcon';
+import { Menu, X, Mail, Code2, Sparkles } from 'lucide-react';
 import { profileData } from '../data/profileData';
 
-export default function Navbar({ onOpenResume }) {
+export default function Navbar({ activeSection = 'hero', onSelectSection }) {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -15,21 +12,6 @@ export default function Navbar({ onOpenResume }) {
         setScrolled(true);
       } else {
         setScrolled(false);
-      }
-
-      const sections = ['hero', 'about', 'skills', 'projects', 'ai-showcase', 'education', 'contact'];
-      const scrollPosition = window.scrollY + 200;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
-          }
-        }
       }
     };
 
@@ -47,11 +29,10 @@ export default function Navbar({ onOpenResume }) {
     { id: 'contact', label: 'Contact' },
   ];
 
-  const scrollTo = (id) => {
+  const handleSelect = (id) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (onSelectSection) {
+      onSelectSection(id);
     }
   };
 
@@ -63,10 +44,10 @@ export default function Navbar({ onOpenResume }) {
         left: 0,
         right: 0,
         zIndex: 1000,
-        transition: 'all 0.3s ease',
+        transition: 'all 0.4s var(--ease-out-expo)',
         background: scrolled ? 'rgba(7, 9, 14, 0.88)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+        backdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid transparent',
         padding: scrolled ? '0.75rem 0' : '1.25rem 0',
       }}
@@ -75,7 +56,7 @@ export default function Navbar({ onOpenResume }) {
         {/* Brand / Logo */}
         <a
           href="#hero"
-          onClick={(e) => { e.preventDefault(); scrollTo('hero'); }}
+          onClick={(e) => { e.preventDefault(); handleSelect('hero'); }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -97,7 +78,8 @@ export default function Navbar({ onOpenResume }) {
             justifyContent: 'center',
             color: '#fff',
             fontWeight: 'bold',
-            boxShadow: '0 4px 12px rgba(56, 189, 248, 0.3)'
+            boxShadow: '0 4px 12px rgba(56, 189, 248, 0.3)',
+            transition: 'transform 0.3s var(--ease-spring)',
           }}>
             <Code2 size={20} />
           </div>
@@ -107,13 +89,13 @@ export default function Navbar({ onOpenResume }) {
         </a>
 
         {/* Desktop Nav Links */}
-        <nav style={{ display: 'none', alignItems: 'center', gap: '0.5rem' }} className="desktop-nav">
+        <nav style={{ display: 'none', alignItems: 'center', gap: '0.35rem' }} className="desktop-nav">
           {navLinks.map((link) => {
             const isActive = activeSection === link.id;
             return (
               <button
                 key={link.id}
-                onClick={() => scrollTo(link.id)}
+                onClick={() => handleSelect(link.id)}
                 style={{
                   background: isActive 
                     ? (link.highlight ? 'rgba(192, 132, 252, 0.15)' : 'rgba(56, 189, 248, 0.12)')
@@ -129,10 +111,11 @@ export default function Navbar({ onOpenResume }) {
                   fontSize: '0.875rem',
                   fontWeight: isActive ? 600 : 500,
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.3s var(--ease-out-expo)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.35rem'
+                  gap: '0.35rem',
+                  transform: isActive ? 'scale(1.02)' : 'scale(1)'
                 }}
               >
                 {link.highlight && <Sparkles size={14} style={{ color: 'var(--accent-purple)' }} />}
@@ -144,64 +127,6 @@ export default function Navbar({ onOpenResume }) {
 
         {/* Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <a
-            href={profileData.personal.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="GitHub Profile"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '38px',
-              height: '38px',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-color)',
-              color: 'var(--text-main)',
-              textDecoration: 'none',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            <GithubIcon size={18} />
-          </a>
-
-          <a
-            href={profileData.personal.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="LinkedIn Profile (abila-khan-keya)"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '38px',
-              height: '38px',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-color)',
-              color: '#38bdf8',
-              textDecoration: 'none',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            <LinkedinIcon size={18} />
-          </a>
-
-          <button
-            onClick={onOpenResume}
-            className="btn-secondary"
-            style={{
-              padding: '0.45rem 1rem',
-              fontSize: '0.85rem',
-              gap: '0.4rem',
-              borderRadius: 'var(--radius-full)'
-            }}
-          >
-            <FileText size={16} style={{ color: 'var(--accent-cyan)' }} />
-            <span>Resume</span>
-          </button>
-
           {/* Mobile Hamburger Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -217,7 +142,8 @@ export default function Navbar({ onOpenResume }) {
               background: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid var(--border-color)',
               color: 'var(--text-main)',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
             }}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -226,47 +152,52 @@ export default function Navbar({ onOpenResume }) {
       </div>
 
       {/* Mobile Menu Drawer */}
-      {mobileMenuOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            background: 'rgba(13, 17, 26, 0.98)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid var(--border-color)',
-            padding: '1.25rem 1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.6rem'
-          }}
-        >
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => scrollTo(link.id)}
-              style={{
-                background: activeSection === link.id ? 'rgba(56, 189, 248, 0.15)' : 'transparent',
-                color: activeSection === link.id ? 'var(--accent-cyan)' : 'var(--text-main)',
-                border: 'none',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-md)',
-                fontSize: '1rem',
-                textAlign: 'left',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <span>{link.label}</span>
-              {link.highlight && <Sparkles size={16} style={{ color: 'var(--accent-purple)' }} />}
-            </button>
-          ))}
-        </div>
-      )}
+      <div
+        style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          background: 'rgba(13, 17, 26, 0.98)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: '1px solid var(--border-color)',
+          padding: mobileMenuOpen ? '1.25rem 1.5rem' : '0 1.5rem',
+          maxHeight: mobileMenuOpen ? '500px' : '0',
+          overflow: 'hidden',
+          transition: 'all 0.4s var(--ease-out-expo)',
+          opacity: mobileMenuOpen ? 1 : 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.6rem'
+        }}
+      >
+        {navLinks.map((link, idx) => (
+          <button
+            key={link.id}
+            onClick={() => handleSelect(link.id)}
+            style={{
+              background: activeSection === link.id ? 'rgba(56, 189, 248, 0.15)' : 'transparent',
+              color: activeSection === link.id ? 'var(--accent-cyan)' : 'var(--text-main)',
+              border: 'none',
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '1rem',
+              textAlign: 'left',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'all 0.3s ease',
+              transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
+              transitionDelay: mobileMenuOpen ? `${idx * 50}ms` : '0ms'
+            }}
+          >
+            <span>{link.label}</span>
+            {link.highlight && <Sparkles size={16} style={{ color: 'var(--accent-purple)' }} />}
+          </button>
+        ))}
+      </div>
 
       {/* Inline styles for responsive navbar */}
       <style>{`
