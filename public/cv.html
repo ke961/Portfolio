@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curriculum Vitae — Abila Khan Keya</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #1e293b;
+      background-color: #f1f5f9;
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+    
+    .cv-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    
+    .header {
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .name-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      color: #0284c7;
+      font-weight: 600;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+    
+    .section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0f172a;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .item {
+      margin-bottom: 0.9rem;
+    }
+    
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #1e293b;
+    }
+    
+    .date {
+      color: #64748b;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .item-sub {
+      font-size: 0.875rem;
+      color: #0284c7;
+      margin-bottom: 0.25rem;
+    }
+    
+    .item-desc {
+      font-size: 0.875rem;
+      color: #334155;
+      line-height: 1.55;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .skill-category strong {
+      color: #0f172a;
+    }
+    
+    .action-bar {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 100;
+    }
+    
+    .btn {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    
+    .btn:hover {
+      background: #0369a1;
+    }
+    
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .cv-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .action-bar {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="action-bar">
+    <button class="btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  </div>
+
+  <div class="cv-container">
+    <div class="header">
+      <div class="name-title">
+        <h1>Abila Khan Keya</h1>
+        <span class="subtitle">Aspiring Software Engineer</span>
+      </div>
+      <div class="contact-info">
+        <span>✉ khankeya961@gmail.com</span>
+        <span>📞 +8801831742886</span>
+        <span>📍 Uttarkhan, Dhaka-1230</span>
+        <span>🐙 github.com/ke961</span>
+        <span>💼 linkedin.com/in/abila-khan-keya</span>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="section">
+      <div class="section-title">Profile</div>
+      <p class="item-desc">
+        Highly motivated Computer Science and Engineering student with hands-on experience in Deep Learning, Computer Vision, FastAPI, React.js, Python, Java, and JavaScript. Skilled in developing full-stack web and desktop applications, designing RESTful APIs, implementing ensemble neural architectures, and deploying automated CI/CD workflows using Git/GitHub Actions. Passionate about building robust software solutions and contributing to collaborative engineering teams.
+      </p>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="section">
+      <div class="section-title">Education</div>
+      <div class="item">
+        <div class="item-header">
+          <span>Bachelor of Science in Computer Science & Engineering (CSE)</span>
+          <span class="date">2022 – Present</span>
+        </div>
+        <div class="item-sub">Independent University, Bangladesh</div>
+      </div>
+      <div class="item">
+        <div class="item-header">
+          <span>Higher Secondary Certificate</span>
+          <span class="date">2021</span>
+        </div>
+        <div class="item-sub">Uttara High School and College</div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="section">
+      <div class="section-title">Certifications</div>
+      <div class="item">
+        <div class="item-header">
+          <span>CCNA: Introduction to Networks</span>
+          <span class="date">Aug 2026</span>
+        </div>
+        <div class="item-desc">
+          Cisco Networking Academy · Independent University, Bangladesh <br>
+          <span style="font-size: 0.8rem; color: #64748b;">Cert ID: fa4b9f5d-56c3-4511-a37e-7822d502d567</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="section">
+      <div class="section-title">Skills</div>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <strong>Programming Languages:</strong><br>
+          Python, Java (OOP), JavaScript, PHP (Basic), SQL (SQLite, MySQL)
+        </div>
+        <div class="skill-category">
+          <strong>AI, ML & Computer Vision:</strong><br>
+          Deep Learning, CNNs, Transfer Learning, Ensemble Methods, Feature Concatenation, OpenCV, NumPy, Model Evaluation & Tuning
+        </div>
+        <div class="skill-category">
+          <strong>Backend & Frameworks:</strong><br>
+          FastAPI, SQLAlchemy, Pydantic, RESTful APIs, JWT Auth, Passlib
+        </div>
+        <div class="skill-category">
+          <strong>Front-End & Desktop UI:</strong><br>
+          React 19, Vite, HTML5, CSS3, Tkinter, Pygame
+        </div>
+        <div class="skill-category">
+          <strong>DevOps & Tools:</strong><br>
+          Git, GitHub Actions (CI/CD), Vercel, Render, VS Code, Postman, Lucidchart, MS Office
+        </div>
+        <div class="skill-category">
+          <strong>Languages:</strong><br>
+          Bangla (Native), English (Fluent), Korean (1A)
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="section">
+      <div class="section-title">Projects</div>
+      
+      <div class="item">
+        <div class="item-header">
+          <span>Plant Disease Recognition System (Deep Learning & Ensemble)</span>
+          <span class="date">Python, CNN, Transfer Learning</span>
+        </div>
+        <p class="item-desc">
+          Evaluated deep learning architectures (Xception, VGG16, VGG19, ResNet101V2, ResNet152V2, ConvNeXtBase) on 7,080 leaf images across 15 disease classes. Developed a multi-branch ensemble model fusing features from Xception, VGG19, and ResNet152V2, achieving <strong>95.45% test accuracy, 95.27% F1-score, and 99.93% ROC-AUC</strong>. Applied data augmentation, fine-tuning, and two-stage optimization (Adam, ReduceLROnPlateau, EarlyStopping) to prevent overfitting and enhance generalization.
+        </p>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <span>LifeFlow – Emergency Blood Donation Management System</span>
+          <span class="date">React 19, FastAPI, SQLite, CI/CD</span>
+        </div>
+        <p class="item-desc">
+          Built a full-stack emergency blood donation platform connecting donors, patients, and hospital administrators in real time. Implemented role-based access control (Admin, Donor, Patient), automated blood matching, interactive Swagger API docs, and configured a 4-job automated GitHub Actions CI/CD deployment pipeline to Vercel and Render.
+        </p>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <span>Employee Workforce Management System (EMS)</span>
+          <span class="date">FastAPI, Python, SQLAlchemy, JavaScript, CSS3</span>
+        </div>
+        <p class="item-desc">
+          Architected an enterprise-grade workforce management system for remote and hybrid teams. Engineered backend endpoints using FastAPI and SQLite with JWT authentication and bcrypt password hashing; developed a responsive Single Page Application featuring glassmorphic UI design and custom CSS design tokens.
+        </p>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <span>Restaurant Management Web App</span>
+          <span class="date">React, Vite, JavaScript, CSS3</span>
+        </div>
+        <p class="item-desc">
+          Designed a fast, fully responsive restaurant web application featuring dynamic menu categorization, interactive cart management, real-time bill calculation, order placement workflows, and past order history tracking.
+        </p>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <span>AgriAnalytics</span>
+          <span class="date">PHP, MySQL, JavaScript, HTML, CSS, SQL</span>
+        </div>
+        <p class="item-desc">
+          Contributed to the development of a web-based agricultural analytics platform with user authentication and database management. Assisted in implementing frontend and backend features, integrating MySQL databases, and collaborating with team members using Git.
+        </p>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <span>Face Recognition System</span>
+          <span class="date">Python, OpenCV, face_recognition, NumPy</span>
+        </div>
+        <p class="item-desc">
+          Developed a real-time face recognition application using OpenCV and the face_recognition library. Implemented facial detection and identification from webcam input with optimized image processing techniques for improved recognition performance.
+        </p>
+      </div>
+    </div>
+
+    <!-- RELEVANT COURSEWORK -->
+    <div class="section">
+      <div class="section-title">Relevant Coursework</div>
+      <p class="item-desc">
+        Data Structures & Algorithms · Object-Oriented Programming (Java) · Software Engineering · Database Management Systems · System Analysis & Design · Artificial Intelligence · Web Development · Computer Networks
+      </p>
+    </div>
+
+    <!-- REFERENCES -->
+    <div class="section">
+      <div class="section-title">References</div>
+      <div class="item">
+        <div class="item-header">
+          <span>Hossain Md Shakhawat, PhD</span>
+          <span class="date">Associate Professor, IUB</span>
+        </div>
+        <div class="item-desc">
+          md.shakhawat@kochi-tech.ac.jp · +8801799916564
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
