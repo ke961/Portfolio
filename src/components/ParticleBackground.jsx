@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 
 export default function ParticleBackground() {
   const canvasRef = useRef(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,18 +19,24 @@ export default function ParticleBackground() {
     resize();
     window.addEventListener('resize', resize);
 
-    // Create floating particles
+    const handleMouseMove = (e) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Create floating particles — reduce count on mobile
     const createParticles = () => {
       particles = [];
-      const count = Math.floor(window.innerWidth / 25);
+      const isMobile = window.innerWidth < 768;
+      const count = isMobile ? Math.floor(window.innerWidth / 40) : Math.floor(window.innerWidth / 28);
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: Math.random() * 1.5 + 0.3,
-          speedX: (Math.random() - 0.5) * 0.3,
-          speedY: (Math.random() - 0.5) * 0.3,
-          opacity: Math.random() * 0.4 + 0.1,
+          speedX: (Math.random() - 0.5) * 0.25,
+          speedY: (Math.random() - 0.5) * 0.25,
+          opacity: Math.random() * 0.35 + 0.08,
           color: ['56, 189, 248', '192, 132, 252', '52, 211, 153'][Math.floor(Math.random() * 3)]
         });
       }
@@ -38,8 +45,22 @@ export default function ParticleBackground() {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const mouse = mouseRef.current;
+      const mouseRadius = 120;
 
       particles.forEach((p, i) => {
+        // Mouse repulsion
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < mouseRadius && dist > 0) {
+          const force = (mouseRadius - dist) / mouseRadius;
+          const angle = Math.atan2(dy, dx);
+          p.x += Math.cos(angle) * force * 2;
+          p.y += Math.sin(angle) * force * 2;
+        }
+
         p.x += p.speedX;
         p.y += p.speedY;
 
@@ -58,15 +79,15 @@ export default function ParticleBackground() {
         // Draw connections to nearby particles
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const cdx = p.x - p2.x;
+          const cdy = p.y - p2.y;
+          const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
 
-          if (dist < 120) {
+          if (cdist < 110) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(${p.color}, ${0.06 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(${p.color}, ${0.05 * (1 - cdist / 110)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -81,6 +102,7 @@ export default function ParticleBackground() {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -95,7 +117,7 @@ export default function ParticleBackground() {
         height: '100%',
         pointerEvents: 'none',
         zIndex: 0,
-        opacity: 0.7
+        opacity: 0.6
       }}
     />
   );
