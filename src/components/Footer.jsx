@@ -3,8 +3,11 @@ import { ArrowUp, Mail, Code2, Heart } from 'lucide-react';
 import GithubIcon from './GithubIcon';
 import LinkedinIcon from './LinkedinIcon';
 import { profileData } from '../data/profileData';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 export default function Footer() {
+  const footerRef = useScrollReveal({ threshold: 0.2 });
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -12,12 +15,23 @@ export default function Footer() {
   return (
     <footer style={{
       background: 'rgba(7, 9, 14, 0.95)',
-      borderTop: '1px solid var(--border-color)',
+      borderTop: '1px solid transparent',
       padding: '3rem 0 2rem 0',
-      position: 'relative'
+      position: 'relative',
+      overflow: 'hidden'
     }}>
+      {/* Gradient top border */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), rgba(192, 132, 252, 0.4), rgba(52, 211, 153, 0.3), transparent)'
+      }} />
+
       <div className="container">
-        <div style={{
+        <div ref={footerRef} className="reveal" style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -36,7 +50,8 @@ export default function Footer() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff'
+              color: '#fff',
+              boxShadow: '0 4px 12px rgba(56, 189, 248, 0.2)'
             }}>
               <Code2 size={18} />
             </div>
@@ -56,6 +71,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               title="GitHub Profile"
+              className="social-icon"
               style={{
                 width: '38px',
                 height: '38px',
@@ -67,7 +83,6 @@ export default function Footer() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 textDecoration: 'none',
-                transition: 'all 0.2s ease'
               }}
             >
               <GithubIcon size={18} />
@@ -78,6 +93,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               title="LinkedIn Profile (abila-khan-keya)"
+              className="social-icon"
               style={{
                 width: '38px',
                 height: '38px',
@@ -89,7 +105,6 @@ export default function Footer() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 textDecoration: 'none',
-                transition: 'all 0.2s ease'
               }}
             >
               <LinkedinIcon size={18} />
@@ -98,6 +113,7 @@ export default function Footer() {
             <a
               href={`mailto:${profileData.personal.email}`}
               title="Send Email"
+              className="social-icon"
               style={{
                 width: '38px',
                 height: '38px',
@@ -109,7 +125,6 @@ export default function Footer() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 textDecoration: 'none',
-                transition: 'all 0.2s ease'
               }}
             >
               <Mail size={18} />
@@ -136,6 +151,7 @@ export default function Footer() {
 
           <button
             onClick={scrollToTop}
+            className="social-icon"
             style={{
               background: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid var(--border-color)',
