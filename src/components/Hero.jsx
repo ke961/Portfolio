@@ -150,7 +150,6 @@ export default function Hero({ onNavigate }) {
               gap: '0.5rem',
               minHeight: '2.5rem'
             }}>
-              <span>I build</span>
               <span style={{ color: 'var(--accent-purple)', textDecoration: 'underline decoration-cyan decoration-2' }}>
                 {currentText}
               </span>
