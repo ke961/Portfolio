@@ -108,4 +108,4 @@ Portfolio/
 
 ---
 
-© 2026 **Abila Khan Keya**. Built with React 19, Vite, and CSS Glassmorphism.
+© 2026 **Abila Khan Keya**. Built with React 19, Vite, and CSS Glassmorphism under MIT License.
