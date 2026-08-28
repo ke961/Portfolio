@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FolderGit2, Search, ExternalLink, ArrowRight, Sparkles, Filter, CheckCircle2 } from 'lucide-react';
 import GithubIcon from './GithubIcon';
 import { profileData } from '../data/profileData';
 import ProjectModal from './ProjectModal';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [cardsRevealed, setCardsRevealed] = useState(false);
+  const headerRef = useScrollReveal();
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCardsRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const filterOptions = ['All', 'AI & Deep Learning', 'Full-Stack Web', 'Desktop & Automation'];
 
@@ -26,7 +46,7 @@ export default function Projects() {
       <div className="container">
         
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+        <div ref={headerRef} className="reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <div className="section-tag">
             <FolderGit2 size={16} />
             <span>Portfolio Highlights</span>
@@ -68,7 +88,7 @@ export default function Projects() {
                 color: 'var(--text-main)',
                 fontSize: '0.9rem',
                 outline: 'none',
-                transition: 'all 0.2s ease',
+                transition: 'all 0.3s var(--ease-out-expo)',
                 backdropFilter: 'blur(8px)'
               }}
               onFocus={(e) => e.target.style.borderColor = 'var(--accent-purple)'}
@@ -81,7 +101,7 @@ export default function Projects() {
             {filterOptions.map((filter) => (
               <button
                 key={filter}
-                onClick={() => setActiveFilter(filter)}
+                onClick={() => { setActiveFilter(filter); setCardsRevealed(false); setTimeout(() => setCardsRevealed(true), 50); }}
                 style={{
                   background: activeFilter === filter ? 'linear-gradient(135deg, rgba(192, 132, 252, 0.25) 0%, rgba(56, 189, 248, 0.25) 100%)' : 'rgba(255, 255, 255, 0.03)',
                   color: activeFilter === filter ? 'var(--text-main)' : 'var(--text-muted)',
@@ -91,7 +111,8 @@ export default function Projects() {
                   fontSize: '0.875rem',
                   fontWeight: activeFilter === filter ? 600 : 500,
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.3s var(--ease-out-expo)',
+                  transform: activeFilter === filter ? 'scale(1.03)' : 'scale(1)'
                 }}
               >
                 {filter}
@@ -101,12 +122,12 @@ export default function Projects() {
         </div>
 
         {/* Projects Cards Grid */}
-        <div style={{
+        <div ref={gridRef} style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
           gap: '2rem'
         }}>
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, pIdx) => (
             <div
               key={project.id}
               className="glass-card"
@@ -115,7 +136,11 @@ export default function Projects() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                position: 'relative'
+                position: 'relative',
+                opacity: cardsRevealed ? 1 : 0,
+                transform: cardsRevealed ? 'translateY(0) scale(1)' : 'translateY(30px) scale(0.97)',
+                transition: `all 0.6s var(--ease-out-expo)`,
+                transitionDelay: `${pIdx * 100}ms`
               }}
             >
               {/* Top Meta info */}
@@ -176,7 +201,8 @@ export default function Projects() {
                         borderRadius: 'var(--radius-sm)',
                         background: 'rgba(255, 255, 255, 0.05)',
                         color: 'var(--text-muted)',
-                        border: '1px solid rgba(255, 255, 255, 0.06)'
+                        border: '1px solid rgba(255, 255, 255, 0.06)',
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       {tech}
@@ -202,11 +228,16 @@ export default function Projects() {
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.35rem'
+                      gap: '0.35rem',
+                      transition: 'all 0.2s ease'
                     }}
+                    onMouseEnter={(e) => e.currentTarget.querySelector('.arrow-icon').style.transform = 'translateX(4px)'}
+                    onMouseLeave={(e) => e.currentTarget.querySelector('.arrow-icon').style.transform = 'translateX(0)'}
                   >
                     <span>View Technical Details</span>
-                    <ArrowRight size={16} />
+                    <span className="arrow-icon" style={{ display: 'inline-flex', transition: 'transform 0.2s ease' }}>
+                      <ArrowRight size={16} />
+                    </span>
                   </button>
 
                   <a
@@ -214,6 +245,7 @@ export default function Projects() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="View Source on GitHub"
+                    className="social-icon"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
