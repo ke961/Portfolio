@@ -9,9 +9,28 @@ import AiShowcase from './components/AiShowcase';
 import Education from './components/Education';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ResumeModal from './components/ResumeModal';
 import ParticleBackground from './components/ParticleBackground';
 import { ArrowUp } from 'lucide-react';
+
+function ScrollProgressBar() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(totalHeight > 0 ? (window.scrollY / totalHeight) : 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div
+      className="scroll-progress"
+      style={{ transform: `scaleX(${progress})` }}
+    />
+  );
+}
 
 function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
@@ -45,7 +64,7 @@ function ScrollToTopButton() {
         cursor: 'pointer',
         boxShadow: '0 8px 25px rgba(2, 132, 199, 0.4)',
         transition: 'all 0.3s ease',
-        animation: 'fadeInUp 0.3s ease-out both'
+        animation: 'fadeInScale 0.4s var(--ease-spring) both'
       }}
     >
       <ArrowUp size={22} />
@@ -54,25 +73,32 @@ function ScrollToTopButton() {
 }
 
 export default function App() {
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [activeSection]);
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-main)', position: 'relative' }}>
+      {/* Scroll Progress Bar */}
+      <ScrollProgressBar />
+
       {/* Ambient Particle Background */}
       <ParticleBackground />
 
       {/* Sticky Glass Navbar */}
-      <Navbar onOpenResume={() => setIsResumeOpen(true)} />
+      <Navbar activeSection={activeSection} onSelectSection={setActiveSection} />
 
       {/* Main Content Sections */}
-      <main style={{ position: 'relative', zIndex: 1 }}>
-        <Hero onOpenResume={() => setIsResumeOpen(true)} />
-        <About />
-        <Skills />
-        <Projects />
-        <AiShowcase />
-        <Education />
-        <Contact />
+      <main style={{ position: 'relative', zIndex: 1, minHeight: '70vh' }}>
+        {activeSection === 'hero' && <Hero onNavigate={setActiveSection} />}
+        {activeSection === 'about' && <About />}
+        {activeSection === 'skills' && <Skills />}
+        {activeSection === 'projects' && <Projects />}
+        {activeSection === 'ai-showcase' && <AiShowcase />}
+        {activeSection === 'education' && <Education />}
+        {activeSection === 'contact' && <Contact />}
       </main>
 
       {/* Footer */}
@@ -80,11 +106,7 @@ export default function App() {
 
       {/* Floating Scroll-to-Top Button */}
       <ScrollToTopButton />
-
-      {/* Interactive Resume View/Download Modal */}
-      {isResumeOpen && (
-        <ResumeModal onClose={() => setIsResumeOpen(false)} />
-      )}
     </div>
   );
 }
+
