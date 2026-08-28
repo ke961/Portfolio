@@ -1,10 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Cpu, Server, Layout, Wrench, Search, Code, CheckCircle, Sparkles } from 'lucide-react';
 import { profileData } from '../data/profileData';
+import { useScrollReveal, useStaggerReveal } from '../utils/useScrollReveal';
+
+function AnimatedProgressBar({ level, revealed }) {
+  return (
+    <div style={{
+      width: '100%',
+      height: '6px',
+      background: 'rgba(255, 255, 255, 0.08)',
+      borderRadius: '3px',
+      overflow: 'hidden'
+    }}>
+      <div
+        className="skill-progress-bar"
+        style={{
+          width: revealed ? `${level}%` : '0%',
+        }}
+      />
+    </div>
+  );
+}
 
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [skillsRevealed, setSkillsRevealed] = useState(false);
+  const headerRef = useScrollReveal();
+  const skillsContainerRef = useRef(null);
+
+  // Observe the skills container to trigger progress bar animations
+  useEffect(() => {
+    const el = skillsContainerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSkillsRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const categories = [
     { id: 'all', label: 'All Tech Stack' },
@@ -48,7 +90,7 @@ export default function Skills() {
       <div className="container">
         
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+        <div ref={headerRef} className="reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <div className="section-tag">
             <Cpu size={16} />
             <span>Technical Capabilities</span>
@@ -90,7 +132,7 @@ export default function Skills() {
                 color: 'var(--text-main)',
                 fontSize: '0.9rem',
                 outline: 'none',
-                transition: 'all 0.2s ease',
+                transition: 'all 0.3s var(--ease-out-expo)',
                 backdropFilter: 'blur(8px)'
               }}
               onFocus={(e) => e.target.style.borderColor = 'var(--accent-cyan)'}
@@ -118,7 +160,8 @@ export default function Skills() {
                   fontSize: '0.875rem',
                   fontWeight: activeTab === cat.id ? 600 : 500,
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.3s var(--ease-out-expo)',
+                  transform: activeTab === cat.id ? 'scale(1.03)' : 'scale(1)'
                 }}
               >
                 {cat.label}
@@ -128,15 +171,25 @@ export default function Skills() {
         </div>
 
         {/* Skills Grid */}
-        <div style={{
+        <div ref={skillsContainerRef} style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
           gap: '1.75rem'
         }}>
-          {filteredData.map((category) => {
+          {filteredData.map((category, catIdx) => {
             const IconComp = getIcon(category.icon);
             return (
-              <div key={category.id} className="glass-card" style={{ padding: '1.75rem' }}>
+              <div
+                key={category.id}
+                className="glass-card"
+                style={{
+                  padding: '1.75rem',
+                  opacity: skillsRevealed ? 1 : 0,
+                  transform: skillsRevealed ? 'translateY(0)' : 'translateY(30px)',
+                  transition: `all 0.6s var(--ease-out-expo)`,
+                  transitionDelay: `${catIdx * 120}ms`
+                }}
+              >
                 
                 {/* Category Header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem' }}>
@@ -148,7 +201,8 @@ export default function Skills() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'var(--accent-cyan)'
+                    color: 'var(--accent-cyan)',
+                    transition: 'all 0.3s ease'
                   }}>
                     <IconComp size={20} />
                   </div>
@@ -171,24 +225,8 @@ export default function Skills() {
                         </span>
                       </div>
 
-                      {/* Level Progress Bar */}
-                      <div style={{
-                        width: '100%',
-                        height: '6px',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        borderRadius: '3px',
-                        overflow: 'hidden'
-                      }}>
-                        <div
-                          style={{
-                            height: '100%',
-                            width: `${skill.level}%`,
-                            background: `linear-gradient(90deg, #38bdf8 0%, #c084fc 100%)`,
-                            borderRadius: '3px',
-                            transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)'
-                          }}
-                        />
-                      </div>
+                      {/* Animated Level Progress Bar */}
+                      <AnimatedProgressBar level={skill.level} revealed={skillsRevealed} />
                     </div>
                   ))}
                 </div>
@@ -214,7 +252,7 @@ export default function Skills() {
               "System Workflow Design & Data Flow Diagrams (DFDs)",
               "Entity-Relationship Diagrams (ERDs) & Database Normalization"
             ].map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', background: 'rgba(255, 255, 255, 0.03)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', background: 'rgba(255, 255, 255, 0.03)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', transition: 'all 0.3s ease' }}>
                 <CheckCircle size={16} style={{ color: 'var(--accent-emerald)', marginTop: '0.2rem', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.875rem', color: 'var(--text-main)', lineHeight: 1.4 }}>{item}</span>
               </div>
